@@ -1,0 +1,156 @@
+﻿@page "/"
+
+<PageTitle>Imagens com Texto</PageTitle>
+
+<link href="~/css/" rel="stylesheet"/>
+
+
+<h1 style ="margin-left:200px">Mercado</h1>
+
+<div class="image-list2">
+
+
+    <div class="image-item2" @onclick='() => OpenLink("https://www.infomoney.com.br/cotacoes/b3/acao/petrobras-petr4/")'>
+        <img src="https://www.infomoney.com.br/wp-content/uploads/2023/05/PETR4-Pagbank-diario-0405.png?fit=930%2C492&quality=50&strip=all" alt="Imagem 1">
+        <p>Petr4</p>
+    </div>
+    <div class="image-item2" @onclick='() => OpenLink("https://www.infomoney.com.br/cotacoes/b3/acao/vale-vale3/")'>
+        <img src="https://www.infomoney.com.br/wp-content/uploads/2023/04/vale-top.png?fit=908%2C455&quality=50&strip=all" alt="Imagem 2">
+        <p>Vale3</p>
+    </div>
+    <div class="image-item2" @onclick='() => OpenLink("https://www.infomoney.com.br/cotacoes/b3/bdr/nubank-roxo34/")'>
+        <img src="https://s3.tradingview.com/n/NYLXub3k_mid.png" alt="Imagem 3">
+        <p>Roxo34</p>
+    </div>
+    <!-- Adicione mais imagens conforme necessário -->
+</div>
+
+
+<h1 style="margin-left:100px">Noticias</h1>
+
+
+<style>
+    /* Estilos para Celulares (até 768px) */
+@@media (max-width: 768px) {
+  .image-list2 {
+    overflow-x: auto; /* Permite rolagem horizontal */
+    scroll-snap-type: x mandatory; /* Habilita snap para rolagem suave */
+    
+  }
+
+        .image-item2 img {
+            width: 980%; /* Tamanho das imagens */
+        }
+
+  .image-item2 {
+    margin-left: 20px;
+    flex-shrink: 10; /* Evita que imagens sejam redimensionadas */
+    width: 300px; /* Largura fixa para as imagens */
+    margin-right: 20px; /* Espaçamento entre imagens */
+  }
+
+}
+
+    .image-item2 p {
+        text-align: center; /* Centraliza o texto */
+        margin-top: 10px; /* Espaçamento entre imagem e texto */
+        line-height: 1.4; /* Ajusta o espaçamento entre linhas do texto */
+    }
+
+
+
+</style>
+<div class="image-list">
+
+
+    <div class="image-item" @onclick='() => OpenLink("https://www.poder360.com.br/justica/odebrecht-aceita-proposta-de-acordo-de-leniencia-da-lava-jato/")'>
+        <img src="https://www.conjur.com.br/wp-content/uploads/2022/30/odebrecht-predio-fachada.jpeg" alt="Imagem 1">
+        <p>Odebrecht aceita proposta de acordo de leniência da lava jato
+            
+        </p>
+    </div>
+    <div class="image-item" @onclick='() => OpenLink("https://www.cnnbrasil.com.br/economia/financas/petrobras-pode-elevar-investimentos-em-ate-10-para-cerca-de-r-421-bi-diz-diretor-financeiro/")'>
+        <img src="https://www.cnnbrasil.com.br/wp-content/uploads/sites/12/Reuters_Direct_Media/BrazilOnlineReportBusinessNews/tagreuters.com2023binary_LYNXMPEJ760L7-FILEDIMAGE.jpg?w=1220&h=674&crop=1" alt="Imagem 2">
+        <p>Petrobras pode elevar os investimentos em até 10%, para cerca de  r$ 421 bi, diz diretor financeiro</p>
+    </div>
+    <div class="image-item" @onclick='() => OpenLink("https://causaoperaria.org.br/2024/direcao-do-bb-aprofunda-a-politica-de-privatizacao-da-empresa/")'>
+        <img src="https://causaoperaria.org.br/wp-content/uploads/sites/12/2024/03/banco-do-brasil-no-exterior.jpg.webp" alt="Imagem 3">
+        <p>Direção  do BB aprofunda política de privatização da empresa
+        </p>
+    </div>
+    <!-- Adicione mais imagens conforme necessário -->
+</div>
+
+
+
+
+
+
+<style>
+
+    .image-list {
+        overflow-x: auto; /* Permite rolagem horizontal */
+        scroll-snap-type: x mandatory; /* Habilita snap para rolagem suave */
+        list-style: none;
+        padding: 20px;
+        margin-left: 50px;
+        display: flex;
+        gap: 400px;
+        justify-content: center; /* Centraliza horizontalmente os itens */
+    }
+
+    .image-item {
+        text-align: center;
+        cursor: pointer; /* Mostra cursor de mão ao passar sobre o item */
+    }
+
+        .image-item img {
+            width: 550px; /* Tamanho das imagens */
+            height: auto;
+            border-radius: 10px; /* Bordas arredondadas para a imagem */
+            transition: transform 0.3s ease; /* Efeito de transição suave ao passar o mouse */
+        }
+
+            .image-item img:hover {
+                transform: scale(1.1); /* Efeito de zoom ao passar o mouse */
+            }
+</style>
+
+
+<style>
+
+    .image-list2 {
+        list-style: none;
+        padding: 30px;
+        margin-left: 100px;
+        display: flex;
+        gap: 300px;
+        justify-content: center; /* Centraliza horizontalmente os itens */
+    }
+
+    .image-item2 {
+        text-align: center;
+        cursor: pointer; /* Mostra cursor de mão ao passar sobre o item */
+    }
+
+        .image-item2 img {
+            width: 45%; /* Tamanho das imagens */
+            height: auto;
+            border-radius: 10px; /* Bordas arredondadas para a imagem */
+            transition: transform 0.3s ease; /* Efeito de transição suave ao passar o mouse */
+        }
+
+            .image-item2 img:hover {
+                transform: scale(1.1); /* Efeito de zoom ao passar o mouse */
+            }
+</style>
+
+@code {
+    private void OpenLink(string url)
+    {
+        NavigationManager.NavigateTo(url, forceLoad: true); // Navega para o link ao clicar na imagem
+    }
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+}

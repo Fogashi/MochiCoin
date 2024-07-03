@@ -1,0 +1,131 @@
+﻿@page "/fetchdata"
+
+@using MochiCoin.Data
+@inject WeatherForecastService ForecastService
+
+<h1>Simulação de Investimento</h1>
+
+<p>Esta tela permite a simulação de um investimento com valorização ou desvalorização aleatória.</p>
+
+@if (forecasts == null)
+{
+    <p><em>Carregando...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Resumo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div class="investment-section">
+    <div class="image-selection">
+        <button @onclick="() => SelectImage(1)">Nubank</button>
+        <button @onclick="() => SelectImage(2)">Tesla</button>
+        <button @onclick="() => SelectImage(3)">Amazon</button>
+        <button @onclick="() => SelectImage(4)">Nvidia</button>
+    </div>
+
+    <div class="selected-image">
+        @if (!string.IsNullOrEmpty(selectedImage))
+        {
+            <img src="@selectedImage" alt="Imagem Selecionada" />
+        }
+    </div>
+
+    <div class="investment-input">
+        <label for="investment">Valor do Investimento:</label>
+        <input type="number" id="investment" @bind="investmentAmount" />
+        <button @onclick="SimulateInvestment">Confirmar Investimento</button>
+    </div>
+
+    <div class="investment-result">
+        @if (resultVisible)
+        {
+            <p>Resultado: @investmentResult</p>
+            <p>Percentual de Valorização/Desvalorização: @percentageResult%</p>
+        }
+    </div>
+</div>
+
+@code {
+    private WeatherForecast[] forecasts;
+    private string selectedImage;
+    private decimal investmentAmount;
+    private string investmentResult;
+    private decimal percentageResult;
+    private bool resultVisible;
+
+    private Dictionary<int, string> images = new Dictionary<int, string>
+    {
+        { 1, "https://media.moneytimes.com.br/uploads/2022/03/image1-7.png" },
+        { 2, "https://media.moneytimes.com.br/uploads/2022/09/bdr-tesla.png" },
+        { 3, "https://d1-invdn-com.akamaized.net/content/pica01ff15b7d63c5db647883aed2ca5490.png" },
+        { 4, "https://d30-invdn-com.investing.com/content/dacb21abc7ad3aa8525e081c6a25ea48.png"}
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+    }
+
+    private void SelectImage(int imageNumber)
+    {
+        if (images.TryGetValue(imageNumber, out string imageUrl))
+        {
+            selectedImage = imageUrl;
+        }
+    }
+
+    private void SimulateInvestment()
+    {
+        var random = new Random();
+        percentageResult = (decimal)(random.NextDouble() * 20 - 10); // Valor aleatório entre -10% e 10%
+        decimal investmentChange = investmentAmount * percentageResult / 100;
+        investmentResult = investmentChange > 0 ? $"Valorizou em {investmentChange:C2}" : $"Desvalorizou em {investmentChange:C2}";
+        resultVisible = true;
+    }
+}
+
+<style>
+    .investment-section {
+        margin-top: 20px;
+    }
+
+    .image-selection {
+        display: flex;
+        gap: 10px;
+    }
+
+    .selected-image img {
+        max-width: 500px;
+        max-height: 500px;
+        margin-top: 10px;
+    }
+
+    .investment-input {
+        margin-top: 20px;
+    }
+
+    .investment-result {
+        margin-top: 20px;
+    }
+</style>

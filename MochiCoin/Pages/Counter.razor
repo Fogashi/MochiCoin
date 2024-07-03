@@ -1,0 +1,163 @@
+﻿@page "/counter"
+
+<h1>Forum de Discussão</h1>
+
+
+
+<div class="forum">
+    <div class="topic-list">
+        @foreach (var topic in Topics)
+        {
+            <div class="topic">
+                <h2>@topic.Title</h2>
+                <p>@topic.Content</p>
+                <div class="responses">
+                    @foreach (var response in topic.Responses)
+                    {
+                        <div class="response">
+                            <p><strong>@response.UserName:</strong> @response.Content</p>
+                        </div>
+                    }
+                </div>
+                <hr />
+                <div class="new-response">
+                    <input type="text" placeholder="Nome" @bind="newResponseUserName" />
+                    <textarea placeholder="Resposta" @bind="newResponseContent"></textarea>
+                    <button class="btn btn-primary" @onclick="() => AddResponse(topic)">Responder</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="new-topic">
+        <h2>Criar Novo Tópico</h2>
+        <input type="text" placeholder="Título" @bind="newTopicTitle" />
+        <textarea placeholder="Conteúdo" @bind="newTopicContent"></textarea>
+        <button class="btn btn-primary" @onclick="CreateNewTopic">Postar Tópico</button>
+    </div>
+</div>
+
+@code {
+    private List<Topic> Topics = new List<Topic>
+    {
+        new Topic
+        {
+            Title = "Vale a pena investir na petobras?",
+            Content = "Vamos discutir sobre a situação atual da petrobras",
+            Responses = new List<Response>
+            {
+                new Response { UserName = "Igor Gallo", Content = "Acho que é melhor esperar diminuir as dividas." },
+                new Response { UserName = "Christyan Kawamura", Content = "Vale, esta rendendo 12% ao mês." }
+            }
+        },
+        new Topic
+        {
+            Title = "A alta da NVIDIA",
+            Content = "O que vocês acham do mercado pôs o boom da NVIDIA",
+            Responses = new List<Response>
+            {
+                new Response { UserName = "Luis Gustavo", Content = "Ótimo já comecei a comprar ações na empresa" },
+                new Response { UserName = "Vinicius Gômes ", Content = "Já vendi ações da empresa, valorizou bastante " }
+            }
+        }
+    };
+
+    private string newTopicTitle;
+    private string newTopicContent;
+    private string newResponseUserName;
+    private string newResponseContent;
+
+    private void CreateNewTopic()
+    {
+        if (!string.IsNullOrEmpty(newTopicTitle) && !string.IsNullOrEmpty(newTopicContent))
+        {
+            Topics.Add(new Topic
+                {
+                    Title = newTopicTitle,
+                    Content = newTopicContent,
+                    Responses = new List<Response>()
+                });
+
+            newTopicTitle = string.Empty;
+            newTopicContent = string.Empty;
+        }
+    }
+
+    private void AddResponse(Topic topic)
+    {
+        if (!string.IsNullOrEmpty(newResponseUserName) && !string.IsNullOrEmpty(newResponseContent))
+        {
+            topic.Responses.Add(new Response
+                {
+                    UserName = newResponseUserName,
+                    Content = newResponseContent
+                });
+
+            newResponseUserName = string.Empty;
+            newResponseContent = string.Empty;
+        }
+    }
+
+    public class Topic
+    {
+        public string Title { get; set; }
+        public string Content { get; set; }
+        public List<Response> Responses { get; set; }
+    }
+
+    public class Response
+    {
+        public string UserName { get; set; }
+        public string Content { get; set; }
+    }
+}
+
+<style>
+    .forum {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .topic-list {
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+
+    .topic {
+        margin-bottom: 20px;
+    }
+
+    .responses {
+        margin-top: 10px;
+        padding-left: 20px;
+        border-left: 2px solid #ddd;
+    }
+
+    .response {
+        margin-bottom: 10px;
+    }
+
+    .new-response {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .new-topic {
+        margin-top: 20px;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+
+        .new-topic input, .new-topic textarea,
+        .new-response input, .new-response textarea {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+</style>
+
